@@ -11,6 +11,7 @@ import {Badge, Icon} from 'native-base';
 import {connect} from 'react-redux';
 
 import {getCategory} from '../../../Publics/Action/category';
+import {getProduct} from '../../../Publics/Action/product';
 import Logo from '../../../assets/Gitar.png';
 
 class contentHeader extends Component {
@@ -18,8 +19,27 @@ class contentHeader extends Component {
     super(props);
     this.state = {
       dataCategory: '',
+      dataProduct: [],
+      field: 'id_category',
+      id_search: '',
     };
   }
+
+  handleGetCategory = id_category => {
+    this.props
+      .dispatch(getProduct(this.state.field, id_category))
+      .then(() => {
+        this.setState(
+          {
+            dataProduct: this.props.products.productsList,
+          },
+          () => console.log('data product = ', this.state),
+        );
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   componentDidMount = async () => {
     await this.props
@@ -29,7 +49,7 @@ class contentHeader extends Component {
           {
             dataCategory: this.props.categorys.categoryList,
           },
-          () => console.warn('AIYOYO', this.state),
+          () => console.log('data from header', this.state),
         );
       })
       .catch(err => {
@@ -38,6 +58,8 @@ class contentHeader extends Component {
   };
   render() {
     const {dataCategory} = this.state;
+    const {id_search} = this.state;
+    console.log('id searchnya = ', id_search);
     return (
       <>
         <View>
@@ -52,12 +74,10 @@ class contentHeader extends Component {
                     <TouchableOpacity
                       activeOpacity={0.8}
                       onPress={() => {
-                        this.props.navigation.navigate('HomeScreen', {
-                          id_category: res.id,
-                        });
-                        console.log('id category', res.id);
-                      }}>
-                      <View style={styles.mainCard} key={index}>
+                        this.handleGetCategory(res.id);
+                      }}
+                      key={index}>
+                      <View style={styles.mainCard}>
                         <View>
                           <Image source={{uri: res.img}} style={styles.image} />
                           <Badge style={styles.badge}>
@@ -82,6 +102,7 @@ class contentHeader extends Component {
 const mapStateToProps = state => {
   return {
     categorys: state.Categorys,
+    products: state.Products,
   };
 };
 

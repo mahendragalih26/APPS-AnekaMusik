@@ -8,6 +8,7 @@ import Home from '../Screens/Page/Category';
 import Detail from '../Screens/Page/Detail';
 import Wishlist from '../Screens/Page/Wishlist';
 import Splash from '../Screens/Page/Splash';
+// import Header from '../Screens/Components/Header';
 
 // import Splash from '../Screens/Splash';
 

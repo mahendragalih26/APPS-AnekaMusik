@@ -47,6 +47,7 @@ class Login extends Component {
             'token',
             res.action.payload.data.data.token,
           );
+          // await AsyncStorage.setItem('id', res.action.payload.data.data.id);
           this.props.navigation.navigate('HomeScreen');
         }
       })
@@ -118,7 +119,13 @@ class Login extends Component {
                 </Text>
               </Col>
               <Col>
-                <Text style={styles.btnForgot}>as Guest...</Text>
+                <Text
+                  style={styles.btnForgot}
+                  onPress={() => {
+                    this.props.navigation.navigate('HomeScreen');
+                  }}>
+                  as Guest...
+                </Text>
               </Col>
             </Row>
           </Content>

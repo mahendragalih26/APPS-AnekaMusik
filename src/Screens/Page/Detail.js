@@ -24,9 +24,11 @@ class detailContent extends Component {
     super(props);
     this.state = {
       data: this.props.navigation.getParam('item'),
+      field: 'id_product',
       isWishList: false,
       id_product: '',
       dataWishlist: [],
+      dataMatch: '',
     };
   }
 
@@ -35,33 +37,36 @@ class detailContent extends Component {
   }
 
   componentDidMount = async () => {
-    await this.props.dispatch(getWishlistDetail(this.state.id_product));
+    await this.props.dispatch(
+      getWishlistDetail(this.state.field, this.state.data.id),
+    );
     this.setState(
       {
-        dataWishlist: this.props.dataWishlist,
+        dataMatch: this.props.dataWishlist,
+        id_product: this.state.data.id,
       },
-
       () => {
         console.log('statenya', this.state.dataMatch.id_product);
-        if (this.state.dataMatch.id_product === this.state.id_detail) {
+        if (this.state.dataMatch.id_product === this.state.id_product) {
           this.setState({isWishList: true});
         }
       },
     );
   };
 
-  handleWishAdd = (id_user, id_product) => {
+  handleWishAdd = async (id_user, id_product) => {
     const NewData = {
       id_user,
       id_product,
     };
-    this.props.dispatch(addWishlist(NewData)).then(() => {
+    await this.props.dispatch(addWishlist(NewData)).then(() => {
       this.setState({isWishList: true});
     });
+    await this.props.dispatch(getWishlistDetail(this.state.field, id_product));
   };
 
-  handleWishRemove = () => {
-    this.props.dispatch(deleteWishlist(this.state.id_product)).then(() => {
+  handleWishRemove = id_product => {
+    this.props.dispatch(deleteWishlist(id_product)).then(() => {
       this.setState({isWishList: false});
     });
   };

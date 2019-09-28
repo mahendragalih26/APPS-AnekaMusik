@@ -10,32 +10,12 @@ import Logo from '../../../assets/Violin.png';
 class contentBase extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      dataProduct: [],
-      field: 'id_category',
-      // id: this.props.id_category || 1,
-    };
+    this.state = {};
   }
 
   formatNumber(num) {
     return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
   }
-
-  componentDidMount = async () => {
-    await this.props
-      .dispatch(getProduct(this.state.field, this.props.id_category || 1))
-      .then(() => {
-        this.setState(
-          {
-            dataProduct: this.props.products.productsList,
-          },
-          () => console.log('data product = ', this.state),
-        );
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
 
   // componentDidMount = () => {
   //   this.subscribe = this.props.navigation.addListener('didFocus', () => {
@@ -46,16 +26,17 @@ class contentBase extends Component {
   render() {
     const {dataProduct} = this.state;
     console.log('data Produk = ', this.props.navigation);
+    const {products} = this.props;
     return (
       <>
         <Container style={styles.container}>
           <View>
-            <Text style={styles.title}>120 Product</Text>
+            <Text style={styles.title}>{products.length} Product</Text>
           </View>
 
           <View style={{flex: 6, flexDirection: 'row', flexWrap: 'wrap'}}>
-            {dataProduct.length > 0 ? (
-              dataProduct.map((res, index) => {
+            {products.length > 0 ? (
+              products.map((res, index) => {
                 return (
                   <TouchableOpacity
                     activeOpacity={0.8}
@@ -92,7 +73,7 @@ class contentBase extends Component {
 
 const mapStateToProps = state => {
   return {
-    products: state.Products,
+    products: state.Products.productsList,
   };
 };
 

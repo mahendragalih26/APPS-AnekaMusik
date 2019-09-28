@@ -8,10 +8,10 @@ export const getWishlist = () => {
   };
 };
 
-export const getWishlistDetail = id => {
+export const getWishlistDetail = (field, id) => {
   return {
     type: 'GET_WISHLIST_DETAIL',
-    payload: axios.get(`${HOST}/wishlist?field=id_product&search=${id}`),
+    payload: axios.get(`${HOST}/wishlist?field=${field}&search=${id}`),
   };
 };
 

@@ -22,7 +22,7 @@ class FABExample extends Component {
           {
             dataWishlist: this.props.data.wishlistList,
           },
-          () => console.warn('AIYOYO', this.state),
+          () => console.log('data from fab', this.state),
         );
       })
       .catch(err => {

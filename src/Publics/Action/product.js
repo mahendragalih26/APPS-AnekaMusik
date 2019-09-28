@@ -9,12 +9,12 @@ export const getProduct = (field, id) => {
   };
 };
 
-export const getProductsDetail = id => {
-  return {
-    type: 'GET_PRODUCTS_DETAIL',
-    payload: axios.get(`${HOST}/product?field=id&search=${id}`),
-  };
-};
+// export const getProductsDetail = id => {
+//   return {
+//     type: 'GET_PRODUCTS_DETAIL',
+//     payload: axios.get(`${HOST}/product?field=id&search=${id}`),
+//   };
+// };
 
 export const addProduct = data => {
   return {

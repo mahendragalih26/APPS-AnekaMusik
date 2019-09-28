@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Logo from '../../assets/icon1.png';
 
 let BUTTONS = [{text: 'LogOut', icon: 'contact', iconColor: '#fa213b'}];
+let BUTTONSGuest = [{text: 'SignIn', icon: 'contact', iconColor: '#fa213b'}];
 // let Action = [{component: this.handleSignout}];
 let DESTRUCTIVE_INDEX = 3;
 let CANCEL_INDEX = 4;
@@ -50,7 +51,9 @@ export default class headerComponent extends Component {
       <>
         <Header style={styles.header} noShadow>
           <Left>
-            <Button onPress={() => this.props.navigation.goBack()} transparent>
+            <Button
+              // onPress={() => this.props.navigation.goBack('HomeScreen')}
+              transparent>
               <Icon name="arrow-back" style={styles.font} />
             </Button>
           </Left>
@@ -102,13 +105,29 @@ export default class headerComponent extends Component {
                 onPress={() => {
                   ActionSheet.show(
                     {
-                      options: BUTTONS,
+                      options: BUTTONSGuest,
                       cancelButtonIndex: CANCEL_INDEX,
                       destructiveButtonIndex: DESTRUCTIVE_INDEX,
                       title: 'Settings',
                     },
                     buttonIndex => {
-                      this.setState({clicked: BUTTONS[buttonIndex]});
+                      switch (buttonIndex) {
+                        case 0:
+                          this.props.navigation.navigate('SigninScreen');
+                          break;
+                        // case 1:
+                        //   this.props.navigation.navigate('DetailScreen');
+                        //   break;
+                        // case 2:
+                        //   this.props.navigation.navigate('Income');
+                        //   break;
+                        //   case 3:
+                        //   await AsyncStorage.clear();
+                        //   this.props.navigation.navigate('Welcome');
+                        //   break;
+                        default:
+                          break;
+                      }
                     },
                   );
                 }}

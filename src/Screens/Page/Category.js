@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, ScrollView, StatusBar} from 'react-native';
 import {Container} from 'native-base';
+import {getWishlistDetail} from '../../Publics/Action/wishlist';
 
 import Header from '../Components/Header';
 import Category from '../Components/content/containerHeader';
@@ -8,8 +9,13 @@ import Main from '../Components/content/Content';
 import Fab from '../Components/fab/fab';
 
 class CategoryHome extends Component {
-  state = {};
+  constructor() {
+    super();
+    this.state = {};
+  }
+
   render() {
+    // const go_back = this.props.navigation.goBack();
     const id_category = this.props.navigation.getParam('id_category');
     console.log('my props = ', this.props.navigation.getParam('id_category'));
     return (
