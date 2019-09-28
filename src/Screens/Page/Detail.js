@@ -7,8 +7,10 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import {Container, Icon, Button, Footer} from 'native-base';
+import {Container, Icon, Button, Footer, Badge} from 'native-base';
 import Header from '../Components/Header';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {connect} from 'react-redux';
 import {
@@ -29,6 +31,7 @@ class detailContent extends Component {
       id_product: '',
       dataWishlist: [],
       dataMatch: '',
+      statusUser: false,
     };
   }
 
@@ -40,7 +43,17 @@ class detailContent extends Component {
     await this.props.dispatch(
       getWishlistDetail(this.state.field, this.state.data.id),
     );
-    this.setState(
+
+    await AsyncStorage.getItem('token', (err, res) => {
+      console.log(err, res);
+      console.log('ini token di detail =', res);
+      if (res) {
+        this.setState({
+          statusUser: true,
+        });
+      }
+    });
+    await this.setState(
       {
         dataMatch: this.props.dataWishlist,
         id_product: this.state.data.id,
@@ -75,6 +88,7 @@ class detailContent extends Component {
     const {data} = this.state;
     console.log('data', data);
     console.log('data wish', this.state.dataWishlist);
+    console.log('ini user ? =', this.state.statusUser);
     return (
       <>
         <Header />
@@ -89,6 +103,7 @@ class detailContent extends Component {
             </View>
             <View style={styles.price}>
               <Text style={styles.subTittle}>Price</Text>
+
               <Text style={styles.textBot}>
                 Rp. {this.formatNumber(data.price)}
               </Text>
@@ -98,30 +113,36 @@ class detailContent extends Component {
               <Text style={styles.textBot}>{data.stock}</Text>
             </View>
             <View style={{margin: 10}}>
-              {this.state.isWishList ? (
-                <TouchableOpacity
-                  style={styles.subIcon}
-                  onPress={() => {
-                    this.handleWishRemove(1, data.id);
-                    this.setState({
-                      id_product: data.id,
-                    });
-                    console.log('added oi = ');
-                  }}>
-                  <Icon name="heart" style={styles.fontMI} />
-                </TouchableOpacity>
+              {this.state.statusUser ? (
+                <View>
+                  {this.state.isWishList ? (
+                    <TouchableOpacity
+                      style={styles.subIcon}
+                      onPress={() => {
+                        this.handleWishRemove(1, data.id);
+                        this.setState({
+                          id_product: data.id,
+                        });
+                        console.log('added oi = ');
+                      }}>
+                      <Icon name="heart" style={styles.fontMI} />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      style={styles.subIcon}
+                      onPress={() => {
+                        this.handleWishAdd(1, data.id);
+                        this.setState({
+                          id_product: data.id,
+                        });
+                        console.log('added oi = ');
+                      }}>
+                      <Icon name="heart-empty" style={styles.fontMI} />
+                    </TouchableOpacity>
+                  )}
+                </View>
               ) : (
-                <TouchableOpacity
-                  style={styles.subIcon}
-                  onPress={() => {
-                    this.handleWishAdd(1, data.id);
-                    this.setState({
-                      id_product: data.id,
-                    });
-                    console.log('added oi = ');
-                  }}>
-                  <Icon name="heart-empty" style={styles.fontMI} />
-                </TouchableOpacity>
+                <View style={{paddingTop: 40}}></View>
               )}
 
               <Text style={styles.mainTitle}>{data.name}</Text>
@@ -129,11 +150,13 @@ class detailContent extends Component {
             </View>
           </Container>
         </ScrollView>
-        <TouchableOpacity>
-          <Footer style={styles.footer}>
-            <Text style={styles.cart}>Add To cart</Text>
-          </Footer>
-        </TouchableOpacity>
+        {this.state.statusUser ? (
+          <TouchableOpacity>
+            <Footer style={styles.footer}>
+              <Text style={styles.cart}>Add To cart</Text>
+            </Footer>
+          </TouchableOpacity>
+        ) : null}
       </>
     );
   }
@@ -215,8 +238,8 @@ const styles = StyleSheet.create({
   },
   subTittle: {
     fontWeight: 'bold',
-    fontSize: 20,
-    color: 'black',
+    fontSize: 16,
+    color: '#edbc5a',
     marginHorizontal: 25,
     alignItems: 'flex-start',
   },
